@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<!-- 
+  DOCTYPE declaration tells the browser this is an HTML5 document.
+  This ensures consistent rendering across all modern browsers.
+-->
+<html lang="en">
+<!-- 
+  'lang="en"' specifies the page is in English.
+  This helps screen readers and search engines.
+-->
+<head>
+  <!-- 
+    <head> contains metadata about the page - not visible content.
+    This includes character encoding, viewport settings, title, and linked files.
+  -->
+  
+  <!-- Set character encoding to UTF-8 (supports all international characters) -->
+  <meta charset="UTF-8">
+  
+  <!-- 
+    Viewport meta tag for responsive design.
+    width=device-width: Makes the page width match the device screen width.
+    initial-scale=1.0: Sets initial zoom level to 100%.
+    Without this, mobile browsers would show a zoomed-out desktop view.
+  -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- Page title - appears in browser tab and search results -->
+  <title>Travel Journal</title>
+  
+  <!-- Link to our CSS stylesheet for styling -->
+  <link rel="stylesheet" href="styles.css">
+  
+  <!-- 
+    Google Fonts imports.
+    preconnect hints tell browser to establish connections early for faster font loading.
+    We're using the "Inter" font family - a clean, modern sans-serif font.
+  -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- 
+    Main app container - wraps all page content.
+    Using a wrapper div allows us to control max-width and centering.
+  -->
+  <div class="app">
+    
+    <!-- ============ HEADER SECTION ============ -->
+    <!-- 
+      The header contains the logo and tagline.
+      It has a blue gradient background defined in CSS.
+    -->
+    <header class="header">
+      <div class="container">
+        <!-- Main logo/title with emoji for visual appeal -->
+        <h1 class="logo">🌍 Travel Journal</h1>
+        <!-- Descriptive tagline below the logo -->
+        <p class="tagline">Document your adventures around the world</p>
+      </div>
+    </header>
+
+    <!-- ============ MAIN CONTENT ============ -->
+    <!-- 
+      <main> is a semantic HTML5 element that identifies the main content.
+      Screen readers use this to skip directly to important content.
+    -->
+    <main class="container main-content">
+      
+      <!-- ======== STATS SECTION ======== -->
+      <!-- 
+        Shows summary statistics at the top of the page.
+        Values are updated dynamically by JavaScript.
+      -->
+      <section class="stats-section">
+        <!-- CSS Grid displays these cards in a responsive row -->
+        <div class="stats-grid">
+          <!-- Each stat card shows a number and label -->
+          <div class="stat-card">
+            <!-- 
+              'id' attributes let JavaScript update these values.
+              Initial value is 0, updated when data loads.
+            -->
+            <span class="stat-value" id="total-trips">0</span>
+            <span class="stat-label">Total Trips</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-value" id="countries-visited">0</span>
+            <span class="stat-label">Countries</span>
+          </div>
+          <div class="stat-card">
+            <!-- '-' indicates no data yet -->
+            <span class="stat-value" id="avg-rating">-</span>
+            <span class="stat-label">Avg Rating</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======== ADD/EDIT FORM SECTION ======== -->
+      <!-- 
+        This form is used for both creating new trips AND editing existing ones.
+        JavaScript changes the form title and button text when editing.
+      -->
+      <section class="form-section">
+        <!-- Title changes to "Edit Trip" when editing -->
+        <h2 id="form-title">Add New Trip</h2>
+        
+        <!-- 
+          Form element with id for JavaScript access.
+          No 'action' attribute - we handle submission with JavaScript.
+        -->
+        <form id="travel-form" class="travel-form">
+          <!-- 
+            Hidden field to store the ID when editing.
+            Empty for new records, populated when editing.
+          -->
+          <input type="hidden" id="travel-id">
+          
+          <!-- 
+            Form rows use CSS Grid for responsive layout.
+            Two fields per row on desktop, stacks on mobile.
+          -->
+          <div class="form-row">
+            <div class="form-group">
+              <!-- 
+                'for' attribute links label to input for accessibility.
+                Clicking the label focuses the input.
+                The asterisk (*) indicates a required field.
+              -->
+              <label for="title">Title *</label>
+              <!-- 
+                'required' attribute enables browser validation.
+                'placeholder' shows example text when empty.
+                'name' is used when reading form data.
+              -->
+              <input type="text" id="title" name="title" required placeholder="Trip to Paris">
+            </div>
+            <div class="form-group">
+              <label for="destination">Destination *</label>
+              <input type="text" id="destination" name="destination" required placeholder="Paris">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="country">Country *</label>
+              <input type="text" id="country" name="country" required placeholder="France">
+            </div>
+            <div class="form-group">
+              <label for="visitDate">Visit Date *</label>
+              <!-- type="date" shows a date picker in modern browsers -->
+              <input type="date" id="visitDate" name="visitDate" required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="rating">Rating *</label>
+              <!-- 
+                Select (dropdown) for rating.
+                First option is empty as a placeholder.
+                Star emojis provide visual feedback.
+              -->
+              <select id="rating" name="rating" required>
+                <option value="">Select rating</option>
+                <option value="5">⭐⭐⭐⭐⭐ (5)</option>
+                <option value="4">⭐⭐⭐⭐ (4)</option>
+                <option value="3">⭐⭐⭐ (3)</option>
+                <option value="2">⭐⭐ (2)</option>
+                <option value="1">⭐ (1)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="category">Category</label>
+              <!-- Category is optional - default is "Other" -->
+              <select id="category" name="category">
+                <option value="other">Other</option>
+                <option value="city">City</option>
+                <option value="beach">Beach</option>
+                <option value="mountain">Mountain</option>
+                <option value="nature">Nature</option>
+                <option value="historical">Historical</option>
+                <option value="adventure">Adventure</option>
+                <option value="cultural">Cultural</option>
+                <option value="food">Food</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Coordinates row for weather integration -->
+          <div class="form-row">
+            <div class="form-group">
+              <label for="latitude">Latitude (optional)</label>
+              <!-- 
+                type="number" shows numeric keyboard on mobile.
+                step="any" allows decimal values.
+                min/max set the valid range for latitude (-90 to 90).
+              -->
+              <input type="number" id="latitude" name="latitude" step="any" min="-90" max="90" placeholder="48.8566">
+            </div>
+            <div class="form-group">
+              <label for="longitude">Longitude (optional)</label>
+              <input type="number" id="longitude" name="longitude" step="any" min="-180" max="180" placeholder="2.3522">
+            </div>
+          </div>
+
+          <!-- Notes field spans full width -->
+          <div class="form-group full-width">
+            <label for="notes">Notes</label>
+            <!-- 
+              Textarea for multi-line text input.
+              rows="3" sets initial height.
+            -->
+            <textarea id="notes" name="notes" rows="3" placeholder="Share your experience..."></textarea>
+          </div>
+
+          <!-- Form action buttons -->
+          <div class="form-actions">
+            <!-- Submit button - text changes when editing -->
+            <button type="submit" class="btn btn-primary" id="submit-btn">Add Trip</button>
+            <!-- 
+              Cancel button - only shown when editing.
+              type="button" prevents form submission.
+              Initially hidden with inline style.
+            -->
+            <button type="button" class="btn btn-secondary" id="cancel-btn" style="display: none;">Cancel</button>
+          </div>
+        </form>
+      </section>
+
+      <!-- ======== FILTERS SECTION ======== -->
+      <!-- Controls for filtering the travel list -->
+      <section class="filter-section">
+        <h2>Your Trips</h2>
+        <div class="filters">
+          <!-- 
+            Search input for text search.
+            JavaScript adds 'input' event listener for real-time filtering.
+          -->
+          <input type="text" id="search-input" placeholder="Search trips..." class="search-input">
+          
+          <!-- 
+            Country filter dropdown.
+            Options are populated dynamically by JavaScript based on existing data.
+          -->
+          <select id="filter-country" class="filter-select">
+            <option value="">All Countries</option>
+            <!-- JavaScript adds country options here -->
+          </select>
+          
+          <!-- Category filter with predefined options -->
+          <select id="filter-category" class="filter-select">
+            <option value="">All Categories</option>
+            <option value="city">City</option>
+            <option value="beach">Beach</option>
+            <option value="mountain">Mountain</option>
+            <option value="nature">Nature</option>
+            <option value="historical">Historical</option>
+            <option value="adventure">Adventure</option>
+            <option value="cultural">Cultural</option>
+            <option value="food">Food</option>
+            <option value="other">Other</option>
+          </select>
+          
+          <!-- Rating filter - filters by minimum rating -->
+          <select id="filter-rating" class="filter-select">
+            <option value="">All Ratings</option>
+            <option value="5">5 Stars</option>
+            <option value="4">4+ Stars</option>
+            <option value="3">3+ Stars</option>
+          </select>
+        </div>
+      </section>
+
+      <!-- ======== TRAVEL LIST SECTION ======== -->
+      <!-- Container for travel record cards -->
+      <section class="travels-section">
+        <!-- 
+          Travel cards are inserted here by JavaScript.
+          CSS Grid handles responsive card layout.
+        -->
+        <div id="travels-list" class="travels-grid">
+          <!-- JavaScript inserts travel cards here -->
+        </div>
+        
+        <!-- 
+          Empty state message - shown when no trips exist.
+          Initially hidden, JavaScript shows it when appropriate.
+        -->
+        <div id="empty-state" class="empty-state" style="display: none;">
+          <p>No trips found. Start documenting your adventures!</p>
+        </div>
+      </section>
+
+      <!-- ======== COUNTRY STATS SECTION ======== -->
+      <!-- Shows aggregated statistics by country -->
+      <section class="country-stats-section">
+        <h2>Statistics by Country</h2>
+        <!-- JavaScript populates this with country stat cards -->
+        <div id="country-stats" class="country-stats-grid">
+          <!-- Country stat cards inserted here by JavaScript -->
+        </div>
+      </section>
+    </main>
+
+    <!-- ============ FOOTER ============ -->
+    <footer class="footer">
+      <div class="container">
+        <p>Travel Journal API &copy; 2024</p>
+      </div>
+    </footer>
+  </div>
+
+  <!-- ============ TOAST NOTIFICATION ============ -->
+  <!-- 
+    Toast is a small popup notification for feedback.
+    It appears briefly when actions complete (add, edit, delete).
+    Positioned fixed in bottom-right corner by CSS.
+    JavaScript adds 'show' class to animate it in.
+  -->
+  <div id="toast" class="toast"></div>
+
+  <!-- 
+    JavaScript file loaded at end of body.
+    This ensures all HTML elements exist before JS tries to access them.
+    Alternatively, we could use 'defer' attribute on script in head.
+  -->
+  <script src="app.js"></script>
+</body>
+</html>

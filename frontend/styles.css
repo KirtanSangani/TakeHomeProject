@@ -1,0 +1,695 @@
+/**
+ * Travel Journal - CSS Styles
+ * 
+ * This stylesheet uses modern CSS features:
+ * - CSS Custom Properties (variables) for consistent theming
+ * - CSS Grid and Flexbox for layout
+ * - Responsive design with media queries
+ * 
+ * Organization:
+ * 1. CSS Reset & Variables
+ * 2. Base Styles
+ * 3. Layout Components (Header, Main, Footer)
+ * 4. UI Components (Cards, Forms, Buttons)
+ * 5. Utilities (Toast)
+ * 6. Responsive Styles
+ */
+
+/* ============ CSS RESET & BASE STYLES ============ */
+
+/**
+ * Universal Box Sizing Reset
+ * 
+ * By default, width/height don't include padding/border, which is confusing.
+ * border-box makes elements' size include padding and border.
+ * The *, *::before, *::after selector applies to all elements and pseudo-elements.
+ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;    /* Remove default margins (browsers add margins to h1, p, etc.) */
+  padding: 0;   /* Remove default padding */
+}
+
+/**
+ * CSS Custom Properties (Variables)
+ * 
+ * :root is the document root (html element) with highest specificity.
+ * Variables defined here are available throughout the stylesheet.
+ * Use var(--variable-name) to reference them.
+ * 
+ * Benefits:
+ * - Change a color once, updates everywhere
+ * - Self-documenting (names describe purpose)
+ * - Easy to create themes (dark mode, etc.)
+ */
+:root {
+  /* Primary colors - used for buttons, links, accent elements */
+  --primary: #3b82f6;           /* Bright blue */
+  --primary-hover: #2563eb;     /* Darker blue for hover states */
+  
+  /* Secondary/neutral color for less prominent elements */
+  --secondary: #64748b;         /* Gray-blue */
+  
+  /* Semantic colors - convey meaning */
+  --success: #22c55e;           /* Green - for success messages */
+  --danger: #ef4444;            /* Red - for delete, errors */
+  --warning: #f59e0b;           /* Orange/amber - for warnings, ratings */
+  
+  /* Background colors */
+  --bg-primary: #f8fafc;        /* Light gray page background */
+  --bg-secondary: #ffffff;      /* White for cards and forms */
+  
+  /* Text colors */
+  --text-primary: #1e293b;      /* Dark gray for main text */
+  --text-secondary: #64748b;    /* Lighter gray for secondary text */
+  
+  /* Border color */
+  --border: #e2e8f0;            /* Light gray for borders */
+  
+  /* Shadow definitions */
+  --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  
+  /* Border radius */
+  --radius: 8px;                /* Standard rounded corners */
+  --radius-lg: 12px;            /* Larger rounded corners for cards */
+}
+
+/**
+ * Body Base Styles
+ */
+body {
+  /* Font stack: Inter (Google Font), then system fonts as fallbacks */
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.6;             /* Comfortable line spacing for readability */
+  min-height: 100vh;            /* At least full viewport height */
+}
+
+/**
+ * Container - centers content with max width
+ */
+.container {
+  max-width: 1200px;            /* Maximum width for readability */
+  margin: 0 auto;               /* Center horizontally */
+  padding: 0 20px;              /* Side padding on smaller screens */
+}
+
+/* ============ HEADER ============ */
+
+/**
+ * Page Header with gradient background
+ */
+.header {
+  /* Linear gradient from light blue to dark blue, at 135 degree angle */
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  color: white;
+  padding: 40px 0;
+  text-align: center;
+}
+
+/**
+ * Logo/Site Title
+ */
+.logo {
+  font-size: 2.5rem;            /* Relative to root font size (usually 16px) */
+  font-weight: 700;             /* Bold */
+  margin-bottom: 8px;
+}
+
+/**
+ * Tagline below logo
+ */
+.tagline {
+  font-size: 1.1rem;
+  opacity: 0.9;                 /* Slightly transparent for visual hierarchy */
+}
+
+/* ============ MAIN CONTENT ============ */
+
+.main-content {
+  padding: 40px 20px;
+}
+
+/* ============ STATS SECTION ============ */
+
+.stats-section {
+  margin-bottom: 40px;
+}
+
+/**
+ * Stats Grid - responsive card layout
+ * 
+ * CSS Grid with auto-fit creates a flexible grid that:
+ * - Has columns at least 150px wide
+ * - Automatically fills available space
+ * - Wraps to fewer columns on smaller screens
+ */
+.stats-grid {
+  display: grid;
+  /* auto-fit: create as many columns as fit */
+  /* minmax(150px, 1fr): each column is at least 150px, at most equal share of space */
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 20px;                    /* Space between grid items */
+}
+
+/**
+ * Individual Stat Card
+ */
+.stat-card {
+  background: var(--bg-secondary);
+  padding: 24px;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  text-align: center;
+}
+
+/**
+ * Large number in stat card
+ */
+.stat-value {
+  display: block;               /* Block display so it's on its own line */
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+/**
+ * Label below the number
+ */
+.stat-label {
+  display: block;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+/* ============ FORM SECTION ============ */
+
+.form-section {
+  background: var(--bg-secondary);
+  padding: 32px;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  margin-bottom: 40px;
+}
+
+.form-section h2 {
+  margin-bottom: 24px;
+  font-size: 1.5rem;
+}
+
+/**
+ * Form layout using Flexbox
+ */
+.travel-form {
+  display: flex;
+  flex-direction: column;       /* Stack children vertically */
+  gap: 20px;                    /* Space between form rows */
+}
+
+/**
+ * Form Row - two inputs side by side on desktop
+ */
+.form-row {
+  display: grid;
+  /* Two equal columns on desktop, stacks on mobile (see media query) */
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+/**
+ * Individual form field container
+ */
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+/**
+ * Full width form group (for notes textarea)
+ */
+.form-group.full-width {
+  grid-column: 1 / -1;          /* Span all columns */
+}
+
+/**
+ * Form labels
+ */
+.form-group label {
+  font-weight: 500;
+  margin-bottom: 6px;
+  font-size: 0.9rem;
+}
+
+/**
+ * Form inputs, selects, and textareas
+ * 
+ * Common styling for all form controls
+ */
+.form-group input,
+.form-group select,
+.form-group textarea {
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 1rem;
+  font-family: inherit;         /* Use same font as body */
+  /* Smooth transition for focus effects */
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+/**
+ * Focus state for form controls
+ * 
+ * :focus is triggered when element receives keyboard focus
+ * This improves accessibility by making focused elements visible
+ */
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;                /* Remove default browser outline */
+  border-color: var(--primary); /* Blue border when focused */
+  /* Subtle glow effect */
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/**
+ * Textarea specific styles
+ */
+.form-group textarea {
+  resize: vertical;             /* Allow vertical resizing only */
+  min-height: 100px;
+}
+
+/**
+ * Form action buttons container
+ */
+.form-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+/* ============ BUTTONS ============ */
+
+/**
+ * Base button styles
+ */
+.btn {
+  padding: 12px 24px;
+  border: none;
+  border-radius: var(--radius);
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;              /* Show pointer cursor on hover */
+  transition: all 0.2s;         /* Smooth hover effects */
+}
+
+/**
+ * Primary button - main action (Add, Submit)
+ */
+.btn-primary {
+  background: var(--primary);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--primary-hover);
+}
+
+/**
+ * Secondary button - less prominent action (Cancel)
+ */
+.btn-secondary {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+}
+
+.btn-secondary:hover {
+  background: var(--border);
+}
+
+/**
+ * Danger button - destructive action (Delete)
+ */
+.btn-danger {
+  background: var(--danger);
+  color: white;
+}
+
+.btn-danger:hover {
+  background: #dc2626;          /* Darker red on hover */
+}
+
+/**
+ * Small button variant
+ */
+.btn-sm {
+  padding: 8px 16px;
+  font-size: 0.875rem;
+}
+
+/* ============ FILTER SECTION ============ */
+
+.filter-section {
+  margin-bottom: 24px;
+}
+
+.filter-section h2 {
+  margin-bottom: 16px;
+  font-size: 1.5rem;
+}
+
+/**
+ * Filters container - wraps and spaces filter inputs
+ */
+.filters {
+  display: flex;
+  flex-wrap: wrap;              /* Wrap to new line on small screens */
+  gap: 12px;
+}
+
+/**
+ * Search input and filter selects
+ */
+.search-input,
+.filter-select {
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 0.95rem;
+  background: var(--bg-secondary);
+}
+
+/**
+ * Search input takes available space
+ */
+.search-input {
+  flex: 1;                      /* Grow to fill available space */
+  min-width: 200px;             /* But not smaller than 200px */
+}
+
+.filter-select {
+  min-width: 150px;
+}
+
+/* ============ TRAVELS GRID ============ */
+
+/**
+ * Grid layout for travel cards
+ */
+.travels-grid {
+  display: grid;
+  /* Cards are at least 320px, fill available space */
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 24px;
+}
+
+/* ============ TRAVEL CARD ============ */
+
+/**
+ * Individual travel card
+ */
+.travel-card {
+  background: var(--bg-secondary);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  overflow: hidden;             /* Clip content to border radius */
+  /* Smooth hover animation */
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+/**
+ * Card hover effect - lifts card up slightly
+ */
+.travel-card:hover {
+  transform: translateY(-4px);  /* Move up 4 pixels */
+  box-shadow: var(--shadow-lg); /* Larger shadow creates "lifted" effect */
+}
+
+/**
+ * Card header with title and location
+ */
+.travel-card-header {
+  padding: 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.travel-card-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+/**
+ * Location line with pin emoji
+ */
+.travel-card-location {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/**
+ * Card body with details
+ */
+.travel-card-body {
+  padding: 20px;
+}
+
+/**
+ * Meta information row (rating, date, category)
+ */
+.travel-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+/**
+ * Star rating display
+ */
+.rating-stars {
+  color: var(--warning);        /* Orange/amber color for stars */
+}
+
+/**
+ * Category badge/pill
+ */
+.category-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  background: var(--bg-primary);
+  border-radius: 20px;          /* Fully rounded ends */
+  font-size: 0.8rem;
+  font-weight: 500;
+  text-transform: capitalize;   /* First letter uppercase */
+}
+
+/**
+ * User notes text
+ */
+.travel-card-notes {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
+
+/**
+ * Weather information box
+ */
+.travel-card-weather {
+  background: var(--bg-primary);
+  padding: 12px;
+  border-radius: var(--radius);
+  margin-bottom: 16px;
+  font-size: 0.9rem;
+}
+
+/**
+ * Temperature display in weather box
+ */
+.weather-temp {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--primary);
+}
+
+/**
+ * Card action buttons
+ */
+.travel-card-actions {
+  display: flex;
+  gap: 8px;
+}
+
+/* ============ EMPTY STATE ============ */
+
+/**
+ * Message shown when no trips exist
+ */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text-secondary);
+}
+
+/* ============ COUNTRY STATS SECTION ============ */
+
+.country-stats-section {
+  margin-top: 40px;
+}
+
+.country-stats-section h2 {
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+}
+
+/**
+ * Grid for country stat cards
+ */
+.country-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 16px;
+}
+
+/**
+ * Individual country stat card
+ */
+.country-stat-card {
+  background: var(--bg-secondary);
+  padding: 20px;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.country-stat-name {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.country-stat-details {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+/* ============ TOAST NOTIFICATION ============ */
+
+/**
+ * Toast - small popup notification
+ * 
+ * Fixed position keeps it in viewport corner regardless of scroll.
+ * Initial state is hidden (translated down and invisible).
+ */
+.toast {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  padding: 16px 24px;
+  background: var(--text-primary);
+  color: white;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+  /* Initial hidden state - below viewport */
+  transform: translateY(100px);
+  opacity: 0;
+  /* Smooth animation when showing/hiding */
+  transition: all 0.3s ease;
+  z-index: 1000;                /* Ensure it appears above other content */
+}
+
+/**
+ * Visible toast state
+ * Applied via JavaScript when showing notification
+ */
+.toast.show {
+  transform: translateY(0);     /* Move to normal position */
+  opacity: 1;                   /* Fully visible */
+}
+
+/**
+ * Success toast (green)
+ */
+.toast.success {
+  background: var(--success);
+}
+
+/**
+ * Error toast (red)
+ */
+.toast.error {
+  background: var(--danger);
+}
+
+/* ============ FOOTER ============ */
+
+.footer {
+  text-align: center;
+  padding: 24px;
+  color: var(--text-secondary);
+  border-top: 1px solid var(--border);
+  margin-top: 40px;
+}
+
+/* ============ RESPONSIVE STYLES ============ */
+
+/**
+ * Media Query for screens 768px wide or smaller (tablets, phones)
+ * 
+ * @media rules apply styles only when conditions are met.
+ * max-width: 768px means "screens 768px wide or less"
+ */
+@media (max-width: 768px) {
+  /* Smaller logo on mobile */
+  .logo {
+    font-size: 2rem;
+  }
+  
+  /* Keep 3 stat cards in a row on mobile */
+  .stats-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  /* Less padding on form for mobile */
+  .form-section {
+    padding: 20px;
+  }
+  
+  /* Stack form fields vertically on mobile */
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+  
+  /* Single column travel cards on mobile */
+  .travels-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  /* Stack filters vertically on mobile */
+  .filters {
+    flex-direction: column;
+  }
+  
+  /* Full width for filter inputs on mobile */
+  .search-input,
+  .filter-select {
+    width: 100%;
+  }
+}
