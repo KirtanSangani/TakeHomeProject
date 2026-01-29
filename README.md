@@ -322,31 +322,6 @@ Returns top-rated travel destinations.
 }
 ```
 
----
-
-## Error Responses
-
-All errors follow a consistent format:
-
-```json
-{
-  "error": {
-    "code": "ERROR_CODE",
-    "message": "Human readable message",
-    "details": []
-  }
-}
-```
-
-### Error Codes
-
-| Code | HTTP Status | Description |
-|------|-------------|-------------|
-| `VALIDATION_ERROR` | 400 | Invalid input data |
-| `BAD_REQUEST` | 400 | Malformed request |
-| `NOT_FOUND` | 404 | Resource not found |
-| `INTERNAL_ERROR` | 500 | Server error |
-
 ### Validation Error Example
 
 ```json
@@ -457,56 +432,6 @@ TakeHomeProject/
 - **Open-Meteo**: Chosen for being free and requiring no API key
 - **Graceful Degradation**: Weather fetch failures don't affect core functionality
 - **Historical Data**: Supports fetching weather for past dates via the archive API
-
----
-
-## Sample cURL Commands
-
-### Create a travel record
-```bash
-curl -X POST http://localhost:3000/api/travels \
-  -H "Content-Type: application/json" \
-  -d '{
-    "title": "Weekend in Paris",
-    "destination": "Paris",
-    "country": "France",
-    "visitDate": "2024-03-15",
-    "rating": 5,
-    "category": "city",
-    "latitude": 48.8566,
-    "longitude": 2.3522,
-    "notes": "Beautiful city!"
-  }'
-```
-
-### List all travels
-```bash
-curl http://localhost:3000/api/travels
-```
-
-### Filter by country and rating
-```bash
-curl "http://localhost:3000/api/travels?country=France&minRating=4"
-```
-
-### Update a travel record
-```bash
-curl -X PUT http://localhost:3000/api/travels/<id> \
-  -H "Content-Type: application/json" \
-  -d '{"rating": 4}'
-```
-
-### Delete a travel record
-```bash
-curl -X DELETE http://localhost:3000/api/travels/<id>
-```
-
-### Get statistics by country
-```bash
-curl http://localhost:3000/api/travels/stats/by-country
-```
-
----
 
 ## Future Improvements
 
